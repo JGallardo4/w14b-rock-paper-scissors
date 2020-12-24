@@ -1,5 +1,7 @@
 <template>
-  <div><rules-graph></rules-graph></div>
+  <article id="game">
+    <rules-graph></rules-graph>
+  </article>
 </template>
 
 <script>
