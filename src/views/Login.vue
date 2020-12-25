@@ -72,8 +72,10 @@ $fullhd-min: 1216px;
     @include desktop-layout;
   }
 }
-
 @mixin formReset() {
+  legend {
+    padding: 0 0.5rem;
+  }
   input {
     font-size: 16px;
     font-size: calc(max(16px, 1em));
@@ -100,7 +102,6 @@ $fullhd-min: 1216px;
   cursor: pointer;
   outline: inherit;
 }
-
 @include formReset;
 
 #login {
@@ -128,10 +129,6 @@ $fullhd-min: 1216px;
       fieldset {
         border: 0;
         display: grid;
-      }
-
-      legend {
-        padding: 0 0.5rem;
       }
 
       input {
