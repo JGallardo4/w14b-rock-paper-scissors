@@ -9,11 +9,19 @@ import {
   faHandScissors,
   faHandPaper,
   faAngleRight,
+  faAngleLeft,
   faInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faHandRock, faHandScissors, faHandPaper, faAngleRight, faInfo);
+library.add(
+  faHandRock,
+  faHandScissors,
+  faHandPaper,
+  faAngleRight,
+  faAngleLeft,
+  faInfo
+);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

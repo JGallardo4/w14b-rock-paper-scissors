@@ -1,5 +1,5 @@
 <template>
-  <article id="rules-graph">
+  <article>
     <details class="icon main-icon">
       <summary id="info"
         ><font-awesome-icon id="info__icon" icon="info"
@@ -62,9 +62,9 @@ export default {
 }
 
 .icon {
-  font-size: 5rem;
-  width: 5em;
-  height: 5em;
+  font-size: 4rem;
+  width: 4em;
+  height: 4em;
   display: grid !important;
   place-items: center;
   > * {
@@ -117,27 +117,26 @@ export default {
   }
 }
 #rock {
-  transform: rotate(0deg) translate(9.4rem) rotate(0deg);
+  transform: rotate(0deg) translate(7rem) rotate(0deg);
 }
 #angle1 {
-  transform: rotate(60deg) translate(10rem) rotate(100deg);
+  transform: rotate(60deg) translate(7.5rem) rotate(100deg);
 }
 #scissors {
-  transform: rotate(120deg) translate(8.5rem) rotate(-120deg);
+  transform: rotate(120deg) translate(6rem) rotate(-120deg);
 }
 #angle2 {
-  transform: rotate(180deg) translate(9.8rem) rotate(-265deg);
+  transform: rotate(180deg) translate(7.4rem) rotate(-265deg);
 }
 #paper {
-  transform: rotate(240deg) translate(10.5rem) rotate(-240deg);
+  transform: rotate(240deg) translate(8rem) rotate(-240deg);
 }
 #angle3 {
-  transform: rotate(300deg) translate(9.8rem) rotate(-270deg);
+  transform: rotate(300deg) translate(7.4rem) rotate(-270deg);
 }
 
 #rules-graph {
-  @include on-circle($item-count: 6, $circle-size: 20rem, $item-size: 5rem);
-  margin: 5em auto 0;
+  @include on-circle($item-count: 6, $circle-size: 15rem, $item-size: 5rem);
   border: solid 5px tomato;
 }
 </style>

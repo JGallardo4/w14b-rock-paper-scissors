@@ -1,37 +1,70 @@
 <template>
   <article id="game">
-    <rules-graph></rules-graph>
+    <rules-graph id="rules-graph"></rules-graph>
+
     <div id="player-selection">
       <form action="" id="player-selection__form">
         <fieldset id="player-selection__fieldset">
           <legend>Select</legend>
           <section id="radio-buttons">
             <label>
-              <input type="radio" value="0" v-model.number="playerSelection" />
+              <input
+                type="radio"
+                value="0"
+                :disabled="gameOn"
+                v-model.number="playerSelection"
+              />
               <span>Rock</span>
             </label>
             <label>
-              <input type="radio" value="2" v-model.number="playerSelection" />
+              <input
+                type="radio"
+                value="2"
+                :disabled="gameOn"
+                v-model.number="playerSelection"
+              />
               <span>Paper</span>
             </label>
             <label>
-              <input type="radio" value="1" v-model.number="playerSelection" />
+              <input
+                type="radio"
+                value="1"
+                :disabled="gameOn"
+                v-model.number="playerSelection"
+              />
               <span>Scissors</span>
             </label>
           </section>
 
-          <button @click.prevent="play()" id="play-button">Play</button>
+          <p v-if="error">Please make a selection</p>
+
+          <button @click.prevent="play()" id="play-button" v-if="!gameOn">
+            <p>Play</p>
+          </button>
+
+          <button @click.prevent="reset()" id="play-button" v-else-if="gameOn">
+            <p>Play Again</p>
+          </button>
         </fieldset>
       </form>
     </div>
-    <div id="game-display"></div>
+
+    <game-display
+      id="game-display"
+      :playerSelection="playerSelection"
+      :computerSelection="computerSelection"
+      :gameResult="gameResult"
+      :gameOn="gameOn"
+    ></game-display>
   </article>
 </template>
 
 <script>
 import RulesGraph from "../components/RulesGraph.vue";
+import GameDisplay from "../components/GameDisplay.vue";
+
 export default {
-  components: { RulesGraph },
+  components: { RulesGraph, GameDisplay },
 
   name: "rock-paper-scissors",
 
@@ -39,12 +72,16 @@ export default {
     return {
       playerSelection: -1,
       computerSelection: -1,
+      gameOn: false,
+      error: false,
     };
   },
 
   computed: {
     gameResult() {
-      var result;
+      var result = -2;
+
+      if (this.playerSelection == -1 && this.computerSelection == -1) return -2;
 
       if (this.playerSelection == this.computerSelection) return 0;
 
@@ -67,8 +104,22 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.gameOn = false;
+      this.playerSelection = -1;
+      this.computerSelection = -1;
+    },
+
     play() {
+      if (this.playerSelection == -1) {
+        this.error = true;
+        return;
+      } else {
+        this.error = false;
+      }
+
       this.computerSelection = this.getRandomInt(0, 3);
+      this.gameOn = true;
 
       console.log("player selection: " + this.playerSelection);
       console.log("computer selection: " + this.computerSelection);
@@ -130,8 +181,31 @@ export default {
 
 @include formReset;
 
+#game {
+  padding: 1rem;
+  gap: 1rem;
+  display: grid;
+  grid-auto-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  #player-selection {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  #rules-graph {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    justify-self: right;
+    margin: 2rem;
+    margin-top: 3rem;
+    margin-right: 3rem;
+  }
+  #game-display {
+    grid-column: 1 / 3;
+  }
+}
+
 #player-selection {
-  padding: 2rem;
+  height: auto;
   #player-selection__fieldset {
     padding: 1rem;
     display: grid;
