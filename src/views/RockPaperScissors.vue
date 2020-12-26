@@ -7,20 +7,20 @@
           <legend>Select</legend>
           <section id="radio-buttons">
             <label>
-              <input type="radio" value="rock" v-model="selection" />
+              <input type="radio" value="0" v-model.number="playerSelection" />
               <span>Rock</span>
             </label>
             <label>
-              <input type="radio" value="paper" v-model="selection" />
+              <input type="radio" value="2" v-model.number="playerSelection" />
               <span>Paper</span>
             </label>
             <label>
-              <input type="radio" value="scissors" v-model="selection" />
+              <input type="radio" value="1" v-model.number="playerSelection" />
               <span>Scissors</span>
             </label>
           </section>
 
-          <button @click="login()" id="play-button">Play</button>
+          <button @click.prevent="play()" id="play-button">Play</button>
         </fieldset>
       </form>
     </div>
@@ -32,13 +32,72 @@
 import RulesGraph from "../components/RulesGraph.vue";
 export default {
   components: { RulesGraph },
+
   name: "rock-paper-scissors",
+
   data: function() {
     return {
-      selection: {
-        type: String,
-      },
+      playerSelection: -1,
+      computerSelection: -1,
     };
+  },
+
+  computed: {
+    gameResult() {
+      var result;
+
+      if (this.playerSelection == this.computerSelection) return 0;
+
+      switch (this.playerSelection) {
+        case 0:
+          this.computerSelection == 1 ? (result = 1) : (result = -1);
+          break;
+        case 1:
+          this.computerSelection == 2 ? (result = 1) : (result = -1);
+          break;
+        case 2:
+          this.computerSelection == 0 ? (result = 1) : (result = -1);
+          break;
+        default:
+          result = -2;
+      }
+
+      return result;
+    },
+  },
+
+  methods: {
+    play() {
+      this.computerSelection = this.getRandomInt(0, 3);
+
+      console.log("player selection: " + this.playerSelection);
+      console.log("computer selection: " + this.computerSelection);
+
+      this.endGame(this.gameResult);
+    },
+
+    getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      //The maximum is exclusive and the minimum is inclusive
+      return Math.floor(Math.random() * (max - min) + min);
+    },
+
+    endGame(gameResult) {
+      switch (gameResult) {
+        case -1:
+          console.log("You lose!");
+          break;
+        case 0:
+          console.log("It's a tie!");
+          break;
+        case 1:
+          console.log("You win!");
+          break;
+        default:
+          console.log("Please make a selection");
+      }
+    },
   },
 };
 </script>
@@ -67,47 +126,6 @@ export default {
   font: inherit;
   cursor: pointer;
   outline: inherit;
-}
-
-@mixin prettyRadio() {
-  /* pretty radio */
-  label > input[type="radio"] {
-    display: none;
-  }
-  label > input[type="radio"] + *::before {
-    content: "";
-    display: inline-block;
-    vertical-align: bottom;
-    width: 1rem;
-    height: 1rem;
-    margin-right: 0.3rem;
-    border-radius: 50%;
-    border-style: solid;
-    border-width: 0.1rem;
-    border-color: gray;
-  }
-  label > input[type="radio"]:checked + * {
-    color: teal;
-  }
-  label > input[type="radio"]:checked + *::before {
-    background: radial-gradient(
-      teal 0%,
-      teal 40%,
-      transparent 50%,
-      transparent
-    );
-    border-color: teal;
-  }
-
-  /* basic layout */
-  fieldset {
-    margin: 20px;
-    max-width: 400px;
-  }
-  label > input[type="radio"] + * {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-  }
 }
 
 @include formReset;
@@ -151,7 +169,5 @@ export default {
       }
     }
   }
-
-  // @include prettyRadio;
 }
 </style>
