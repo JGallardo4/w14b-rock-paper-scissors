@@ -185,22 +185,23 @@ export default {
   padding: 1rem;
   gap: 1rem;
   display: grid;
-  grid-auto-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
   grid-template-rows: auto 1fr;
   #player-selection {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
   }
   #rules-graph {
-    grid-column: 2;
-    grid-row: 1 / 3;
+    grid-column: 1;
+    grid-row: 1;
     justify-self: right;
     margin: 2rem;
     margin-top: 3rem;
     margin-right: 3rem;
   }
   #game-display {
-    grid-column: 1 / 3;
+    grid-column: 1;
+    grid-row: 3;
   }
 }
 
@@ -241,6 +242,24 @@ export default {
         background-color: white;
         color: black;
       }
+    }
+  }
+}
+
+@media screen and (min-width: 769px) {
+  #game {
+    grid-auto-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    #player-selection {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    #rules-graph {
+      grid-column: 2;
+      grid-row: 1 / 3;
+    }
+    #game-display {
+      grid-column: 1 / 3;
     }
   }
 }

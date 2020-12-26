@@ -62,9 +62,9 @@ export default {
 }
 
 .icon {
-  font-size: 4rem;
-  width: 4em;
-  height: 4em;
+  font-size: 3rem;
+  width: 3em;
+  height: 3em;
   display: grid !important;
   place-items: center;
   > * {
@@ -123,7 +123,7 @@ export default {
   transform: rotate(60deg) translate(7.5rem) rotate(100deg);
 }
 #scissors {
-  transform: rotate(120deg) translate(6rem) rotate(-120deg);
+  transform: rotate(120deg) translate(6.5rem) rotate(-120deg);
 }
 #angle2 {
   transform: rotate(180deg) translate(7.4rem) rotate(-265deg);
