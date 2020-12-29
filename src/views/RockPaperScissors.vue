@@ -1,70 +1,83 @@
 <template>
-  <article id="game">
-    <rules-graph id="rules-graph"></rules-graph>
+  <body>
+    <header>
+      <button id="logout-button" @click="logOut()">Logout</button>
+    </header>
+    <main>
+      <navbar></navbar>
+      <article id="game">
+        <rules-graph id="rules-graph"></rules-graph>
 
-    <div id="player-selection">
-      <form action="" id="player-selection__form">
-        <fieldset id="player-selection__fieldset">
-          <legend>Select</legend>
-          <section id="radio-buttons">
-            <label>
-              <input
-                type="radio"
-                value="0"
-                :disabled="gameOn"
-                v-model.number="playerSelection"
-              />
-              <span>Rock</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="2"
-                :disabled="gameOn"
-                v-model.number="playerSelection"
-              />
-              <span>Paper</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="1"
-                :disabled="gameOn"
-                v-model.number="playerSelection"
-              />
-              <span>Scissors</span>
-            </label>
-          </section>
+        <div id="player-selection">
+          <form action="" id="player-selection__form">
+            <fieldset id="player-selection__fieldset">
+              <legend>Select</legend>
+              <section id="radio-buttons">
+                <label>
+                  <input
+                    type="radio"
+                    value="0"
+                    :disabled="gameOn"
+                    v-model.number="playerSelection"
+                  />
+                  <span>Rock</span>
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="2"
+                    :disabled="gameOn"
+                    v-model.number="playerSelection"
+                  />
+                  <span>Paper</span>
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="1"
+                    :disabled="gameOn"
+                    v-model.number="playerSelection"
+                  />
+                  <span>Scissors</span>
+                </label>
+              </section>
 
-          <p v-if="error">Please make a selection</p>
+              <p v-if="error">Please make a selection</p>
 
-          <button @click.prevent="play()" id="play-button" v-if="!gameOn">
-            <p>Play</p>
-          </button>
+              <button @click.prevent="play()" id="play-button" v-if="!gameOn">
+                <p>Play</p>
+              </button>
 
-          <button @click.prevent="reset()" id="play-button" v-else-if="gameOn">
-            <p>Play Again</p>
-          </button>
-        </fieldset>
-      </form>
-    </div>
+              <button
+                @click.prevent="reset()"
+                id="play-button"
+                v-else-if="gameOn"
+              >
+                <p>Play Again</p>
+              </button>
+            </fieldset>
+          </form>
+        </div>
 
-    <game-display
-      id="game-display"
-      :playerSelection="playerSelection"
-      :computerSelection="computerSelection"
-      :gameResult="gameResult"
-      :gameOn="gameOn"
-    ></game-display>
-  </article>
+        <game-display
+          id="game-display"
+          :playerSelection="playerSelection"
+          :computerSelection="computerSelection"
+          :gameResult="gameResult"
+          :gameOn="gameOn"
+        ></game-display>
+      </article>
+    </main>
+  </body>
 </template>
 
 <script>
 import RulesGraph from "../components/RulesGraph.vue";
 import GameDisplay from "../components/GameDisplay.vue";
+import Navbar from "../components/Navbar.vue";
 
 export default {
-  components: { RulesGraph, GameDisplay },
+  components: { RulesGraph, GameDisplay, Navbar },
 
   name: "rock-paper-scissors",
 
@@ -103,6 +116,10 @@ export default {
     },
   },
 
+  beforeCreate() {
+    this.$store.dispatch("checkLogin");
+  },
+
   methods: {
     reset() {
       this.gameOn = false;
@@ -121,9 +138,6 @@ export default {
       this.computerSelection = this.getRandomInt(0, 3);
       this.gameOn = true;
 
-      console.log("player selection: " + this.playerSelection);
-      console.log("computer selection: " + this.computerSelection);
-
       this.endGame(this.gameResult);
     },
 
@@ -134,20 +148,8 @@ export default {
       return Math.floor(Math.random() * (max - min) + min);
     },
 
-    endGame(gameResult) {
-      switch (gameResult) {
-        case -1:
-          console.log("You lose!");
-          break;
-        case 0:
-          console.log("It's a tie!");
-          break;
-        case 1:
-          console.log("You win!");
-          break;
-        default:
-          console.log("Please make a selection");
-      }
+    logOut() {
+      this.$store.dispatch("logOut");
     },
   },
 };
@@ -180,6 +182,25 @@ export default {
 }
 
 @include formReset;
+
+header {
+  display: flex;
+  justify-content: right;
+  padding: 1rem;
+  #logout-button {
+    @include resetButton;
+    border: 1px solid black;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 1rem;
+    &:hover {
+      background-color: white;
+      color: black;
+    }
+  }
+}
 
 #game {
   padding: 1rem;

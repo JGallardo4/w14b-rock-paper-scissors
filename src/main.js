@@ -1,8 +1,9 @@
 import Vue from "vue";
 import App from "./App.vue";
-import router from "./router";
+import router from "./router/index.js";
 import axios from "axios";
 import Vuex from "vuex";
+import cookies from "vue-cookies";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faHandRock,
@@ -50,22 +51,44 @@ const store = new Vuex.Store({
   },
 
   actions: {
-    logIn(context) {
-      axios
-        .get("")
-        .then(() => {
-          context.commit("LOG_IN");
-        })
-        .catch(console.log);
+    logIn({ commit }, payload) {
+      axios.post("https://reqres.in/api/login", payload).then((response) => {
+        if (response.status == 200) {
+          cookies.set("loginToken", response.data.token, "1h");
+          commit("LOG_IN");
+          router.push("/");
+          return true;
+        } else {
+          return false;
+        }
+      });
+    },
 
-      return this.getters.getJoke;
+    logOut({ commit }) {
+      commit("LOG_OUT");
+      cookies.remove("loginToken");
+      if (router.currentRoute != "login") {
+        router.push("login");
+      }
+    },
+
+    checkLogin({ commit, dispatch }) {
+      if (cookies.get("loginToken") == "QpwL5tke4Pnpja7X4") {
+        commit("LOG_IN");
+        if (router.currentRoute != "/") {
+          router.push("/");
+        }
+      } else {
+        dispatch("logOut");
+      }
     },
   },
 });
 
 new Vue({
-  router,
+  router: router,
   axios: axios,
   store: store,
+  cookies: cookies,
   render: (h) => h(App),
 }).$mount("#app");

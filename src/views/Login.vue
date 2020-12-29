@@ -1,23 +1,41 @@
 <template>
-  <div id="login">
-    <form action="" id="login__form">
-      <fieldset id="login__fieldset">
-        <legend>Login</legend>
+  <body>
+    <main>
+      <div id="login">
+        <form action="" id="login__form">
+          <fieldset id="login__fieldset">
+            <legend>Login</legend>
 
-        <p id="username-input">
-          <label for="username">Username</label>
-          <input type="text" name="username" v-model="input.username" />
-        </p>
+            <p id="username-input">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                name="username"
+                v-model="input.username"
+                placeholder="eve.holt@reqres.in"
+              />
+            </p>
 
-        <p id="password-input">
-          <label for="password">Password</label>
-          <input type="password" name="password" v-model="input.password" />
-        </p>
+            <p id="password-input">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                v-model="input.password"
+                placeholder="cityslicka"
+              />
+            </p>
 
-        <button @click="login()" id="submit-login">Submit</button>
-      </fieldset>
-    </form>
-  </div>
+            <button @click.prevent="logIn()" id="submit-login">Submit</button>
+
+            <p id="error-message" v-if="error">
+              There was an error with your username and/or password.
+            </p>
+          </fieldset>
+        </form>
+      </div>
+    </main>
+  </body>
 </template>
 
 <script>
@@ -30,22 +48,36 @@ export default {
         username: "",
         password: "",
       },
+
+      error: false,
     };
   },
+
+  beforeCreate() {
+    this.$store.dispatch("checkLogin");
+  },
+
+  watch: {
+    "input.username": function() {
+      this.error = false;
+    },
+
+    "input.password": function() {
+      if (this.input.password != "") {
+        this.error = false;
+      }
+    },
+  },
+
   methods: {
-    login() {
-      this.$axios
-        .post("https://reqres.in/api/login", {
-          email: "eve.holt@reqres.in",
-          password: "cityslicka",
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            console.log("success");
-          } else {
-            console.log("invalid login");
-          }
-        });
+    logIn() {
+      this.$store.dispatch("logIn", this.input).finally((response) => {
+        console.log(response);
+        if (!response) {
+          this.input.password = "";
+          this.error = true;
+        }
+      });
     },
   },
 };
@@ -157,6 +189,10 @@ $fullhd-min: 1216px;
           background-color: white;
           color: black;
         }
+      }
+
+      #error-message {
+        color: darkred;
       }
     }
   }

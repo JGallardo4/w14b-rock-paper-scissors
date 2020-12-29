@@ -84,7 +84,9 @@ export default {
   #player-icon {
     grid-column: 1;
     grid-row: 1;
-    color: blue;
+    border: solid 1px black;
+    padding: 1rem;
+    border-radius: 10px;
   }
   #comparison {
     grid-column: 2;
